@@ -1,10 +1,113 @@
-import React from "react";
+import React, { useEffect, useState } from 'react';
+import '../Home/styles.css';
 import { Helmet } from "react-helmet";
 import { Text, Button, Input, Img, Heading, RatingBar, Slider } from "../../components";
 
-export default function HomePage() {
+function HomePage() {
   const [sliderState, setSliderState] = React.useState(0);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Increase count by 100 for demonstration
+      setCount(prevCount => prevCount + 100);
+    }, 1000); // Adjust interval as needed for smoother animation
+
+    // Clear interval on component unmount
+    return () => clearInterval(interval);
+  }, []);
+  useEffect(() => {
+    // Get the heading text
+    const headingText = document.querySelector('.typing-effect').textContent;
+    const words = headingText.split(' ');
+
+    // Replace the heading text with spans for each word
+    document.querySelector('.typing-effect').innerHTML = words
+      .map(word => `<span style="display: none;">${word}</span>`)
+      .join(' ');
+
+    // Function to animate typing effect
+    let counter = 0;
+    const type = () => {
+      const spans = document.querySelectorAll('.typing-effect span');
+      if (counter < spans.length) {
+        spans[counter].style.display = 'inline';
+        counter++;
+        setTimeout(type, 200); // Adjust the timeout for typing speed
+      }
+    };
+
+    // Call the type function when component mounts
+    type();
+  }, []);
+
   const sliderRef = React.useRef(null);
+  useEffect(() => {
+    // Get the text content of the paragraph
+    const text = document.querySelector('.typewriter').textContent;
+    const textArr = text.split(' ');
+
+    // Replace the paragraph text with a span for each word
+    document.querySelector('.typewriter').innerHTML = textArr
+      .map(word => `<span style="display: none;">${word}</span>`)
+      .join(' ');
+
+    // Function to animate typing effect
+    let counter = 0;
+    const type = () => {
+      const spans = document.querySelectorAll('.typewriter span');
+      if (counter < spans.length) {
+        spans[counter].style.display = 'inline';
+        counter++;
+        setTimeout(type, 100); // Adjust the timeout for typing speed
+      }
+    };
+
+    // Call the type function when component mounts
+    type();
+  }, []);
+  const [visitsCount, setVisitsCount] = useState(0);
+  const [followersCount, setFollowersCount] = useState(0);
+  const [customerCount, setCustomerCount] = useState(0);
+
+  // Function to simulate counting increase
+  const simulateCounting = () => {
+    let count = 0;
+    const interval = setInterval(() => {
+      count += 100; // Increment count by 100 for demonstration
+      setCustomerCount(count);
+      if (count >= 128000) {
+        clearInterval(interval);
+      }
+    }, 10); // Adjust interval as needed for smoother animation
+  };
+
+  // Call the function to start simulating counting increase on component mount
+  useEffect(() => {
+    simulateCounting();
+  }, []);
+
+  // Function to simulate visits count increase
+  const simulateVisitsCountIncrease = () => {
+    // Simulate an increase in visits count every 1 second
+    setInterval(() => {
+      setVisitsCount(prevCount => prevCount + 1000); // Increment count by 1000 for demonstration
+    }, 1000);
+  };
+
+  // Function to simulate social followers count increase
+  const simulateFollowersCountIncrease = () => {
+    // Simulate an increase in social followers count every 2 seconds
+    setInterval(() => {
+      setFollowersCount(prevCount => prevCount + 100); // Increment count by 100 for demonstration
+    }, 2000);
+  };
+
+  // Call the functions to start simulating counts increase on component mount
+  useEffect(() => {
+    simulateVisitsCountIncrease();
+    simulateFollowersCountIncrease();
+  }, []);
 
   return (
     <>
@@ -79,66 +182,70 @@ export default function HomePage() {
                 >
                   Lambe - Digital Marketing Service
                 </Text>
-                <Heading as="h1" className="leading-[76px] !text-gray-900">
-                  Boost Your Online Presence with Digital Marketing Services
-                </Heading>
+                <Heading
+      as="h1"
+      className="leading-[76px] text-gray-900 animate__animated animate__slideInLeft"
+    ><h1 className="leading-[76px] text-gray-900 slideInLeft">Boost Your Online Presence with Digital Marketing Services</h1>
+    </Heading>
+
               </div>
               <div className="flex items-center justify-between gap-5 pr-[127px] md:pr-5 sm:flex-col">
                 <Text size="2xl" as="p" className="w-[32%] self-end leading-9 !text-gray-900 sm:w-full">
                   December Stats.
                 </Text>
                 <div className="flex w-[60%] items-center justify-between gap-5 sm:w-full">
-                  <div className="flex flex-col items-start">
-                    <Heading size="xs" as="h2" className="!text-blue_gray-900">
-                      7M +
-                    </Heading>
-                    <Text as="p" className="!text-blue_gray-500">
-                      Monthly visits
-                    </Text>
-                  </div>
-                  <div className="flex flex-col items-start">
-                    <Heading size="xs" as="h3" className="!text-blue_gray-900">
-                      3,1 M
-                    </Heading>
-                    <Text as="p" className="!text-blue_gray-500">
-                      Social followers
-                    </Text>
-                  </div>
-                </div>
+      <div className="flex flex-col items-start">
+        <Heading size="xs" as="h2" className="!text-blue_gray-900">
+          {visitsCount.toLocaleString()}+
+        </Heading>
+        <Text as="p" className="!text-blue_gray-500">
+          Monthly visits
+        </Text>
+      </div>
+      <div className="flex flex-col items-start">
+        <Heading size="xs" as="h3" className="!text-blue_gray-900">
+          {followersCount.toLocaleString()}+
+        </Heading>
+        <Text as="p" className="!text-blue_gray-500">
+          Social followers
+        </Text>
+      </div>
+    </div>
               </div>
             </div>
             <div className="relative ml-[-10px] flex w-[42%] items-center justify-center md:ml-0 md:w-full sm:flex-col">
-              <div className="flex flex-1 items-start sm:flex-col sm:self-stretch">
-                <div className="relative z-[3] mt-[22px] h-[114px] w-[41%] sm:w-full">
-                  <div className="absolute bottom-[0.00px] right-[0.00px] m-auto flex w-[94%] items-start justify-center gap-3.5 rounded-[12px] bg-pink-300 p-[7px]">
-                    <Heading as="h4" className="mb-1">
-                      3X
-                    </Heading>
-                    <Text size="xs" as="p" className="w-[69%] leading-5">
-                      Commodo est vitae sit et et. Lorem felis.
-                    </Text>
-                  </div>
-                  <Text
-                    size="xs"
-                    as="p"
-                    className="absolute left-[0.00px] top-[0.00px] m-auto flex h-[24px] items-center justify-center rounded-[12px] bg-blue-500 px-4 py-0.5"
-                  >
-                    Super
-                  </Text>
-                </div>
-                <div className="relative ml-[-187px] flex-1 rounded-tl-[16px] rounded-tr-[16px] bg-gray-900 sm:ml-0 sm:self-stretch">
-                  <div className="h-[518px] rounded-tl-[16px] rounded-tr-[16px] bg-blue_gray-900" />
-                </div>
-              </div>
-              <div className="relative z-[2] mb-[174px] ml-[-50px] flex w-[16%] flex-col items-center gap-[19px] self-end rounded-md bg-gray-100 pt-[18px] sm:ml-0 sm:w-full">
-                <Img src="images/img_activity.svg" alt="activity_one" className="h-[24px] w-[24px]" />
-                <div className="flex justify-center self-stretch bg-gray-900">
-                  <Text size="xl" as="p" className="self-end text-center !text-gray-100">
-                    98,6%
-                  </Text>
-                </div>
-              </div>
-            </div>
+      <div className="flex flex-1 items-start sm:flex-col sm:self-stretch">
+        <div className="relative z-[3] mt-[22px] h-[114px] w-[41%] sm:w-full transition duration-300 ease-in-out transform hover:scale-105">
+          <div className="absolute bottom-[0.00px] right-[0.00px] m-auto flex w-[94%] items-start justify-center gap-3.5 rounded-[12px] bg-pink-300 p-[7px]">
+            <Heading as="h4" className="mb-1">
+              3X
+            </Heading>
+            <Text size="xs" as="p" className="w-[69%] leading-5">
+              Commodo est vitae sit et et. Lorem felis.
+            </Text>
+          </div>
+          <Text
+            size="xs"
+            as="p"
+            className="absolute left-[0.00px] top-[0.00px] m-auto flex h-[24px] items-center justify-center rounded-[12px] bg-blue-500 px-4 py-0.5"
+          >
+            Super
+          </Text>
+        </div>
+        <div className="relative ml-[-187px] flex-1 rounded-tl-[16px] rounded-tr-[16px] bg-gray-900 sm:ml-0 sm:self-stretch">
+          <div className="h-[518px] rounded-tl-[16px] rounded-tr-[16px] bg-blue_gray-900" />
+        </div>
+      </div>
+      <div className="relative z-[2] mb-[174px] ml-[-50px] flex w-[16%] flex-col items-center gap-[19px] self-end rounded-md bg-gray-100 pt-[18px] sm:ml-0 sm:w-full animate__animated animate__swing">
+
+        <Img src="images/img_activity.svg" alt="activity_one" className="h-[24px] w-[24px]" />
+        <div className="flex justify-center self-stretch bg-gray-900">
+          <Text size="xl" as="p" className="self-end text-center !text-gray-100">
+            98,6%
+          </Text>
+        </div>
+      </div>
+    </div>
           </div>
         </div>
         <div className="flex justify-between gap-5 bg-deep_purple-900 p-16 md:flex-col md:p-5">
@@ -153,19 +260,19 @@ export default function HomePage() {
                 </Text>
                 <div className="flex w-[19%] items-center justify-center gap-1.5">
                   <Img src="images/img_star_1.svg" alt="image" className="h-[24px] w-[24px] rounded-[1px]" />
-                  <Text as="p" className="self-start">
-                    4.8
-                  </Text>
+                  <Text as="p" className="self-start animate__animated animate__bounceIn">
+      4.8
+    </Text>
                 </div>
               </div>
               <div className="flex flex-col">
-                <Heading size="md" as="h2">
-                  128,000 +
-                </Heading>
-                <Text size="s" as="p" className="leading-7">
-                  customers in over 120 countries growing their businesses with Lambe
-                </Text>
-              </div>
+      <Heading size="md" as="h2">
+        {customerCount.toLocaleString()}
+      </Heading>
+      <Text size="s" as="p" className="leading-7">
+        customers in over 120 countries growing their businesses with Lambe
+      </Text>
+    </div>
             </div>
             <div className="h-full w-px bg-deep_purple-700 md:h-px md:w-full" />
             <div className="flex w-[44%] flex-col gap-6 md:w-full">
@@ -195,12 +302,12 @@ export default function HomePage() {
         </div>
         <div className="flex flex-col items-center justify-center gap-32 bg-white-A700 px-14 py-24 md:gap-24 md:p-5 sm:gap-16">
           <div className="mx-auto flex w-full max-w-[1140px] gap-[69px] border-b-[0.5px] border-solid border-blue_gray-100 md:flex-col">
-            <div className="flex w-full items-start gap-5">
+          <div className="flex w-full items-start justify-center gap-5 hover:bg-gray-100 hover:shadow-md transition duration-300">
               <Button shape="circle" className="w-[60px] !rounded-[30px] border border-solid border-pink-300">
                 <Img src="images/img_settings.svg" />
               </Button>
-              <div className="flex flex-1 flex-col items-start gap-3 pt-2.5">
-                <Text size="2xl" as="p" className="!text-gray-900">
+              <div className="flex flex-1 flex-col items-start gap-3 pt-2.">
+        <Text size="2xl" as="p" className="!text-gray-900">
                   Digital Marketing
                 </Text>
                 <Text as="p" className="leading-8 !text-blue_gray-500">
@@ -208,12 +315,12 @@ export default function HomePage() {
                 </Text>
               </div>
             </div>
-            <div className="flex w-full items-start gap-5">
-              <Button shape="circle" className="w-[60px] !rounded-[30px] border border-solid border-pink-300">
+            <div className="flex w-full items-start justify-center gap-5 hover:bg-gray-100 hover:shadow-md transition duration-300">
+              <Button shape="circle" className="w-[60px] !rounded-[30px] border ">
                 <Img src="images/img_settings.svg" />
               </Button>
-              <div className="flex flex-1 flex-col items-start gap-[15px] pt-[7px]">
-                <Text size="2xl" as="p" className="!text-gray-900">
+              <div className="flex w-full items-start justify-center gap-5">
+        <Text size="2xl" as="p" className="!text-gray-900">
                   Social Media
                 </Text>
                 <Text as="p" className="leading-8 !text-blue_gray-500">
@@ -221,12 +328,12 @@ export default function HomePage() {
                 </Text>
               </div>
             </div>
-            <div className="flex w-full items-start gap-5">
+            <div className="flex w-full items-start justify-center gap-5 hover:bg-gray-100 hover:shadow-md transition duration-300">
               <Button shape="circle" className="w-[60px] !rounded-[30px] border border-solid border-pink-300">
                 <Img src="images/img_settings.svg" />
               </Button>
               <div className="flex flex-1 flex-col items-start gap-3 pt-2.5">
-                <Text size="2xl" as="p" className="!text-gray-900">
+        <Text size="2xl" as="p" className="!text-gray-900">
                   Creative Branding
                 </Text>
                 <Text as="p" className="leading-8 !text-blue_gray-500">
@@ -245,13 +352,18 @@ export default function HomePage() {
                 >
                   About us
                 </Text>
-                <Heading as="h2" className="leading-[76px] !text-gray-900">
-                  Helping Millions Grow Better Since 2010
-                </Heading>
-                <Text as="p" className="leading-8 !text-blue_gray-500">
-                  Et et id laoreet ultricies elementum venenatis ornare. Sollicitudin mauris id aliquet magna
-                  adipiscing. In lorem lacus quis egestas tincidunt neque ut accumsan.
-                </Text>
+                <div className="flex flex-col">
+                <Heading
+      as="h1"
+      className="leading-[76px] text-gray-900 animate__animated animate__slideInLeft"
+    ><h2 className="leading-[76px] text-gray-900 slideInLeft">    Helping Millions Grow Better Since 2010</h2>
+    </Heading>
+              
+   
+      <Text as="p" className="leading-8 !text-blue_gray-500 typewriter">
+        Et et id laoreet ultricies elementum venenatis ornare. Sollicitudin mauris id aliquet magna adipiscing. In lorem lacus quis egestas tincidunt neque ut accumsan.
+      </Text>
+    </div>
               </div>
               <Button
                 color="deep_purple_A400"
@@ -276,7 +388,7 @@ export default function HomePage() {
             >
               Our Services
             </Text>
-            <Heading as="h2" className="text-center !text-gray-900">
+            <Heading as="h2" className="text-center !text-gray-900 typing-effect">
               Elevate Your Digital Presence Today
             </Heading>
             <Text as="p" className="w-[86%] text-center leading-8 !text-blue_gray-500 md:w-full">
@@ -287,8 +399,8 @@ export default function HomePage() {
           <div className="relative mx-auto h-[488px] w-full max-w-[1300px] self-stretch rounded-tl-[32px] rounded-tr-[32px] bg-white-A700 md:p-5">
             <div className="absolute bottom-0 left-0 right-0 top-0 m-auto flex w-full flex-col gap-[30px] px-20 md:relative md:px-5">
               <div className="flex flex-1 justify-between gap-5 md:flex-col">
-                <div className="flex w-full items-start justify-center gap-5">
-                  <Button color="gray_50" shape="circle" className="w-[60px] !rounded-[30px]">
+              <div className="flex w-full items-start justify-center gap-5 hover:bg-gray-100 hover:shadow-md transition duration-300">
+        <Button color="gray_50" shape="circle" className="w-[60px] !rounded-[30px]">
                     <Img src="images/img_vector.svg" />
                   </Button>
                   <div className="flex flex-1 flex-col items-start gap-3 pt-2.5">
@@ -300,8 +412,8 @@ export default function HomePage() {
                     </Text>
                   </div>
                 </div>
-                <div className="flex w-full items-start justify-center gap-5">
-                  <Button color="gray_50" shape="circle" className="w-[60px] !rounded-[30px]">
+                <div className="flex w-full items-start justify-center gap-5 hover:bg-gray-100 hover:shadow-md transition duration-300">
+        <Button color="gray_50" shape="circle" className="w-[60px] !rounded-[30px]">
                     <Img src="images/img_vector.svg" />
                   </Button>
                   <div className="flex flex-1 flex-col items-start gap-3 pt-2.5">
@@ -313,8 +425,8 @@ export default function HomePage() {
                     </Text>
                   </div>
                 </div>
-                <div className="flex w-full items-start justify-center gap-5">
-                  <Button color="gray_50" shape="circle" className="w-[60px] !rounded-[30px]">
+                <div className="flex w-full items-start justify-center gap-5 hover:bg-gray-100 hover:shadow-md transition duration-300">
+        <Button color="gray_50" shape="circle" className="w-[60px] !rounded-[30px]">
                     <Img src="images/img_vector.svg" />
                   </Button>
                   <div className="flex flex-1 flex-col items-start gap-3 pt-2.5">
@@ -329,8 +441,8 @@ export default function HomePage() {
               </div>
               <div className="h-px w-full bg-gradient" />
               <div className="flex flex-1 justify-between gap-5 md:flex-col">
-                <div className="flex w-full items-start justify-center gap-5">
-                  <Button color="gray_50" shape="circle" className="w-[60px] !rounded-[30px]">
+              <div className="flex w-full items-start justify-center gap-5 hover:bg-gray-100 hover:shadow-md transition duration-300">
+        <Button color="gray_50" shape="circle" className="w-[60px] !rounded-[30px]">
                     <Img src="images/img_vector.svg" />
                   </Button>
                   <div className="flex flex-1 flex-col items-start gap-3 pt-2.5">
@@ -342,8 +454,8 @@ export default function HomePage() {
                     </Text>
                   </div>
                 </div>
-                <div className="flex w-full items-start justify-center gap-5">
-                  <Button color="gray_50" shape="circle" className="w-[60px] !rounded-[30px]">
+                <div className="flex w-full items-start justify-center gap-5 hover:bg-gray-100 hover:shadow-md transition duration-300">
+        <Button color="gray_50" shape="circle" className="w-[60px] !rounded-[30px]">
                     <Img src="images/img_vector.svg" />
                   </Button>
                   <div className="flex flex-1 flex-col items-start gap-3 pt-2.5">
@@ -355,8 +467,8 @@ export default function HomePage() {
                     </Text>
                   </div>
                 </div>
-                <div className="flex w-full items-start justify-center gap-5">
-                  <Button color="gray_50" shape="circle" className="w-[60px] !rounded-[30px]">
+                <div className="flex w-full items-start justify-center gap-5 hover:bg-gray-100 hover:shadow-md transition duration-300">
+        <Button color="gray_50" shape="circle" className="w-[60px] !rounded-[30px]">
                     <Img src="images/img_vector.svg" />
                   </Button>
                   <div className="flex flex-1 flex-col items-start gap-3 pt-2.5">
@@ -412,9 +524,13 @@ export default function HomePage() {
                 >
                   Why Choose us
                 </Text>
-                <Heading as="h3" className="leading-[76px] !text-gray-900">
-                  Choose Us to Grow Your Business
-                </Heading>
+                <Heading
+      as="h1"
+      className="leading-[76px] text-gray-900 slide-in-right"
+    >
+      Choose Us to Grow Your Business
+    </Heading>
+              
                 <Text as="p" className="leading-8 !text-blue_gray-500">
                   Placerat sed enim felis arcu. Placerat aliquam amet eleifend sollicitudin mauris. Nibh sit diam vitae
                   velit cras elit eget.
@@ -494,25 +610,25 @@ export default function HomePage() {
                     Total Reviews
                   </Text>
                   <div className="flex flex-col items-start">
-                    <div className="flex items-start gap-[15px]">
-                      <Heading size="md" as="h3">
-                        122 K{" "}
-                      </Heading>
-                      <Button
-                        color="blue_500"
-                        size="xs"
-                        rightIcon={
-                          <Img src="images/img_arrowupcircle.svg" alt="arrow-up-circle" className="h-[12px] w-[12px]" />
-                        }
-                        className="mt-[11px] min-w-[72px] gap-1 rounded-[12px] font-medium"
-                      >
-                        24%
-                      </Button>
-                    </div>
-                    <Text as="p" className="relative mt-[-1px] !text-blue_gray-100">
-                      Pulvinar commodo arcu
-                    </Text>
-                  </div>
+      <div className="flex items-start gap-[15px]">
+        <Heading size="md" as="h3">
+          {count.toLocaleString()}
+        </Heading>
+        <Button
+          color="blue_500"
+          size="xs"
+          rightIcon={
+            <Img src="images/img_arrowupcircle.svg" alt="arrow-up-circle" className="h-[12px] w-[12px]" />
+          }
+          className="mt-[11px] min-w-[72px] gap-1 rounded-[12px] font-medium"
+        >
+          24%
+        </Button>
+      </div>
+      <Text as="p" className="relative mt-[-1px] !text-blue_gray-100">
+        Pulvinar commodo arcu
+      </Text>
+    </div>
                 </div>
                 <div className="flex w-[48%] flex-col items-start gap-2 sm:w-full">
                   <Text size="2xl" as="p">
@@ -771,4 +887,5 @@ export default function HomePage() {
       </div>
     </>
   );
-}
+                      }
+export default HomePage;
